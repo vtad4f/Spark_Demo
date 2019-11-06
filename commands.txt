@@ -2,13 +2,14 @@
 Hadoop Commands
 ***************
 
-hadoop fs -rm -r InputFolder							//remove the inputfolder if already exist
-hadoop fs -mkdir InputFolder							//make the inputfolder
-hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input1.txt' InputFolder //copy input1.txt to hdfs inputfolder
-hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input2.txt' InputFolder	//copy input2.txt to hdfs inputfolder
-hadoop fs -rm -r OutputFolder							//remove the outputfolder if already exist
-hadoop fs -ls OutputFolder							//see the files in outputfolder
-hadoop fs -cat OutputFolder/part-00000						//see the content of the result
+hadoop fs -rm -r InputFolder				//remove inputfolder if exist
+hadoop fs -mkdir InputFolder				//make the inputfolder
+hadoop fs -copyFromLocal '/home/cloudera/Downloads/Spark_Demo-master/input1.txt' InputFolder
+hadoop fs -copyFromLocal '/home/cloudera/Downloads/Spark_Demo-master/input2.txt' InputFolder
+							//copy input1.txt and input2.txt to hdfs inputfolder
+hadoop fs -rm -r OutputFolder				//remove outputfolder if exist
+hadoop fs -ls OutputFolder				//see the files in outputfolder
+hadoop fs -cat OutputFolder/part-00000			//see the content of the result
 
 
 ****************
@@ -29,11 +30,11 @@ System.out.println(wordMap.collect().mkString("\n"))
 val wordCount = wordMap.reduceByKey(_+_)
 System.out.println(wordCount.collect().mkString("\n"))
 
-val filter = wordCount.filter(_._2 > 1)
-System.out.println(filter.collect().mkString("\n"))
-
 val sorted = wordCount.sortBy(-_._2)
 System.out.println(sorted.collect().mkString("\n"))
+
+val filter = sorted.filter(_._2 > 1)
+System.out.println(filter.collect().mkString("\n"))
 
 sorted.saveAsTextFile("OutputFolder")
 
