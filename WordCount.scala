@@ -1,6 +1,9 @@
-val loadfile = sc.textFile("InputFolder/input.txt")
-val fm = loadfile.flatMap(line => line.split(" "))
-val mp = fm.map(word => (word,1))
-val counts = mp.reduceByKey(_+_)
-System.out.println(counts.collect().mkString("\n"))
-//spark-shell -i '/home/cloudera/git/Spark_Demo/WordCount.scala'
+val loadfile = sc.textFile("InputFolder/input1.txt")
+val words = loadfile.flatMap(line => line.split(" "))
+val wordMap = words.map(word => (word,1))
+val wordCount = wordMap.reduceByKey(_+_)
+val sorted = wordCount.sortBy(-_._2)
+val filter = sorted.filter(_._2 > 1)
+filter.saveAsTextFile("OutputFolder")
+
+//spark-shell -i '/home/cloudera/Downloads/Spark_Demo-master/WordCount.scala'
