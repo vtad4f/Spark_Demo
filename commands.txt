@@ -2,13 +2,13 @@
 Hadoop Commands
 ***************
 
-hadoop fs -rm -r InputFolder
-hadoop fs -mkdir InputFolder
-hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input1.txt' InputFolder
-hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input2.txt' InputFolder
-hadoop fs -rm -r OutputFolder
-hadoop fs -ls OutputFolder
-hadoop fs -cat OutputFolder/part-00000
+hadoop fs -rm -r InputFolder							//remove the inputfolder if already exist
+hadoop fs -mkdir InputFolder							//make the inputfolder
+hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input1.txt' InputFolder //copy input1.txt to hdfs inputfolder
+hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input2.txt' InputFolder	//copy input2.txt to hdfs inputfolder
+hadoop fs -rm -r OutputFolder							//remove the outputfolder if already exist
+hadoop fs -ls OutputFolder							//see the files in outputfolder
+hadoop fs -cat OutputFolder/part-00000						//see the content of the result
 
 
 ****************
@@ -18,17 +18,24 @@ Simple WordCount
 spark-shell
 
 val loadfile = sc.textFile("InputFolder/input1.txt")
+System.out.println(loadfile.collect().mkString("\n"))
+
 val words = loadfile.flatMap(line => line.split(" "))
-val counts = words.map(word => (word,1))
-val wordCount = counts.reduceByKey(_+_)
+System.out.println(words.collect().mkString("\n"))
+
+val wordMap = words.map(word => (word,1))
+System.out.println(wordMap.collect().mkString("\n"))
+
+val wordCount = wordMap.reduceByKey(_+_)
 System.out.println(wordCount.collect().mkString("\n"))
-counts.saveAsTextFile("OutputFolder")
 
 val filter = wordCount.filter(_._2 > 1)
 System.out.println(filter.collect().mkString("\n"))
 
-var sorted = wordCount.sortBy(-_._2)
+val sorted = wordCount.sortBy(-_._2)
 System.out.println(sorted.collect().mkString("\n"))
+
+sorted.saveAsTextFile("OutputFolder")
 
 
 **************************
