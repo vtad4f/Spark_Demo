@@ -1,0 +1,111 @@
+hadoop fs -rm -r InputFolder
+hadoop fs -mkdir InputFolder
+hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input1.txt' InputFolder
+hadoop fs -copyFromLocal '/home/cloudera/git/Spark_Demo/input2.txt' InputFolder
+hadoop fs -rm -r OutputFolder
+hadoop fs -ls OutputFolder
+hadoop fs -cat OutputFolder/part-00000
+
+
+spark-shell
+
+//wordcount 1
+
+val loadfile = sc.textFile("InputFolder/input1.txt")
+val words = loadfile.flatMap(line => line.split(" "))
+val counts = words.map(word => (word,1))
+val wordCount = counts.reduceByKey(_+_)
+System.out.println(wordCount.collect().mkString("\n"))
+counts.saveAsTextFile("OutputFolder")
+
+val filter = wordCount.filter(_._2 > 1)
+System.out.println(filter.collect().mkString("\n"))
+
+var sorted = wordCount.sortBy(-_._2)
+System.out.println(sorted.collect().mkString("\n"))
+
+
+//wordcount 2
+val loadfile = sc.textFile("InputFolder/input2.txt")
+
+val pairs = loadfile.map{ line => 
+		val parts = line.split("\t")
+		(parts(0), parts(1))
+	}
+System.out.println(pairs.collect().mkString("\n"))
+
+val chapters = pairs.flatMap{ case (line, chapter) => 
+		val words = line.split(" ")
+		words.map(word => (word, chapter))
+	}
+val filterChap = chapters.filter(_._1.startsWith("Ex")==false)
+System.out.println(filterChap.collect().mkString("\n"))
+
+val wordChap = filterChap.distinct().groupByKey()
+System.out.println(wordChap.collect().mkString("\n"))
+
+var wordChapCount = wordChap.map{ case(word, chapList) =>
+		val chapCount = chapList.size
+		(word, chapCount)
+	}
+System.out.println(wordChapCount.collect().mkString("\n"))
+
+val wordAllChap = wordChapCount.filter(_._2 == 3)
+System.out.println(wordAllChap.collect().mkString("\n"))
+
+val counts = pairs.flatMap{ case (line, chapter) => 
+		val words = line.split(" ")
+		words.map(word => (word, 1))
+	}
+val wordCount = counts.reduceByKey(_+_)
+System.out.println(wordCount.collect().mkString("\n"))
+
+val allData = wordCount.join(wordAllChap)
+System.out.println(allData.collect().mkString("\n"))
+
+
+//wordcount 3
+
+val loadfile = sc.textFile("InputFolder/input2.txt")
+
+val pairs = loadfile.map{ line => 
+		val parts = line.split("\t")
+		(parts(0), parts(1))
+	}
+System.out.println(pairs.collect().mkString("\n"))
+
+val chapters = pairs.flatMap{ case (line, chapter) => 
+		val words = line.split(" ")
+		words.map(word => (word, chapter))
+	}
+System.out.println(chapters.collect().mkString("\n"))
+
+val wordChap = chapters.distinct().groupByKey()
+System.out.println(wordChap.collect().mkString("\n"))
+
+var wordChapCount = wordChap.map{ case(word, chapList) =>
+		val chapCount = chapList.size
+		(word, chapCount)
+	}
+System.out.println(wordChapCount.collect().mkString("\n"))
+
+val counts = pairs.flatMap{ case (line, chapter) => 
+		val words = line.split(" ")
+		words.map(word => (word, 1))
+	}
+val wordCount = counts.reduceByKey(_+_)
+System.out.println(wordCount.collect().mkString("\n"))
+
+val allData = wordCount.join(wordChapCount)
+System.out.println(allData.collect().mkString("\n"))
+
+val filterData = allData.filter(_._1.startsWith("Ex")==false)
+System.out.println(filterData.collect().mkString("\n"))
+
+val wordCountAllChap =filterData.map { case(word, pairs)=> (word, pairs._1, pairs._2) }
+System.out.println(wordCountAllChap.collect().mkString("\n"))
+
+val wordCountCommonChap = wordCountAllChap.filter(_._2 == 3)
+System.out.println(wordCountCommonChap.collect().mkString("\n"))
+
+
