@@ -56,7 +56,7 @@ System.out.println(chapters.collect().mkString("\n"))
 val wordChap = chapters.distinct().groupByKey()
 System.out.println(wordChap.collect().mkString("\n"))
 
-var wordChapCount = wordChap.map{ case(word, chapList) => val chapCount = chapList.size; (word, chapCount); }
+val wordChapCount = wordChap.map{ case(word, chapList) => val chapCount = chapList.size; (word, chapCount); }
 System.out.println(wordChapCount.collect().mkString("\n"))
 
 val wordMap = pairs.flatMap{ case (line, chapter) => val words = line.split(" "); words.map(word => (word, 1)); }
@@ -94,7 +94,7 @@ System.out.println(filterChap.collect().mkString("\n"))
 val wordChap = filterChap.distinct().groupByKey()
 System.out.println(wordChap.collect().mkString("\n"))
 
-var wordChapCount = wordChap.map{ case(word, chapList) => val chapCount = chapList.size; (word, chapCount) }
+val wordChapCount = wordChap.map{ case(word, chapList) => val chapCount = chapList.size; (word, chapCount) }
 System.out.println(wordChapCount.collect().mkString("\n"))
 
 val wordAllChap = wordChapCount.filter(_._2 == 3)
