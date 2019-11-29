@@ -9,7 +9,7 @@ val wordCount = wordMap.reduceByKey((v1, v2) => v1 + v2)
 // val sorted = wordCount.sortBy(-_._2)
 // val filter = sorted.filter(_._2 > 1)
 
-sorted.saveAsTextFile("OutputFolder")
+wordCount.saveAsTextFile("OutputFolder")
 
 System.exit(0)
 
