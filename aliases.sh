@@ -5,6 +5,7 @@ function x      { git update-index --chmod=+x $1 ; }
 function reload { git fetch ; git rebase origin/master ; source aliases.sh ; }
 
 INPUT_DIR=InputFolder
+OUTPUT_DIR=OutputFolder
 REPO_DIR=/home/cloudera/git/vtad4f/Spark_Demo
 
 function spark
@@ -13,9 +14,10 @@ function spark
    hadoop fs -mkdir $INPUT_DIR
    hadoop fs -copyFromLocal $REPO_DIR/input/*.txt $INPUT_DIR
    
+   hadoop fs -rm -r $OUTPUT_DIR
+   
    spark-shell -i $REPO_DIR/SimpleWordCount.scala
    
-   hadoop fs -rm -r OutputFolder
-   hadoop fs -cat OutputFolder/part-00000
+   hadoop fs -cat $OUTPUT_DIR/part-00000
 }
 
