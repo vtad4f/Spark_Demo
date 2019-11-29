@@ -16,8 +16,8 @@ function spark
    
    hadoop fs -rm -r $OUTPUT_DIR
    
-   spark-shell -i $REPO_DIR/SimpleWordCount.scala
+   spark-shell -i $REPO_DIR/PageRank.scala
    
-   hadoop fs -cat $OUTPUT_DIR/part-00000
+   hadoop fs -cat $OUTPUT_DIR/part-00000 | head 10
 }
 
