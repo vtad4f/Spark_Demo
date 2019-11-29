@@ -1,5 +1,5 @@
 
-val pattern = "[\\s\"\\[\\]',]+".r
+val pattern = "[^\\s\"\\[\\]',]+".r
 
 
 val loadfile = sc.textFile("InputFolder/PRData.txt")
