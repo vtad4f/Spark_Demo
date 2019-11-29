@@ -1,7 +1,9 @@
 
+val pattern = "[\\s\"\\[\\]',]+".r
+
 
 val loadfile = sc.textFile("InputFolder/PRData.txt")
-val words = loadfile.flatMap(line => regexp_extract(line, "[\\s\"\\[\\]',]+"))
+val words = loadfile.flatMap(line => pattern.findAllIn(line))
 
 val wordMap = words.map(word => (word,1))
 val wordCount = wordMap.reduceByKey((v1, v2) => v1 + v2)
