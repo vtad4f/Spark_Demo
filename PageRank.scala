@@ -6,17 +6,11 @@ import scala.collection.mutable.ListBuffer
 val PATTERN = "[^\\s\"\\[\\]',]+".r
 
 
-class MyArray extends Array[Double]
-{
-   
-}
-
-
-def MyMap(line : String) : List[(String, MyArray)] = {
+def MyMap(line : String) : List[(String, Array[Double])] = {
    
    val pages = PATTERN.findAllIn(line).toArray
    
-   val ret = ListBuffer[(String, MyArray)]()
+   val ret = ListBuffer[(String, Array[Double])]()
    ret += ((pages(0), Array(1.0 - 0.85, pages.length - 1.0, 0.0)))
    
    for (i <- 1 to (pages.length - 1)) {
@@ -26,13 +20,13 @@ def MyMap(line : String) : List[(String, MyArray)] = {
 }
 
 
-def MyReduce(a : MyArray, b : MyArray) : MyArray = {
+def MyReduce(a : Array[Double], b : Array[Double]) : String = {
 
    return Array(
       a(0) + b(0),
       a(1) + b(1),
       a(2) + b(2)
-   )
+   ).mkString(" ")
 }
 
 
