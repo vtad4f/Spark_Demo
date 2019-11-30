@@ -30,10 +30,16 @@ def MyReduce(a : Array[Double], b : Array[Double]) : Array[Double] = {
 }
 
 
+def ToString(pair : ((String, Array[Double]))) : String = {
+
+   return pair(0) + " " + pair(1).mkString(" ")
+}
+
+
 val lines   = sc.textFile("InputFolder/PRData.txt")
 val pages   = lines.flatMap(MyMap)
 val ranks   = pages.reduceByKey(MyReduce)
-val strings = ranks.map((array : Array[Double]) => array.mkString(" "))
+val strings = ranks.map(ToString)
 
 strings.saveAsTextFile("OutputFolder")
 
