@@ -1,17 +1,15 @@
 
 val pattern = "[^\\s\"\\[\\]',]+".r
 
-def MyMap(line : String) : Array[Array[String]] = {
+def MyMap(line : String) : List[(String, Array[Double])] = {
    
    val pages = pattern.findAllIn(line).toArray
    
-   val ret = Array.ofDim[String](pages.length, 2)
-   ret(0)(0) = pages(0)
-   ret(0)(1) = Array( 1.0 - 0.85, pages.length - 1.0, 0.0 )
+   val ret : List[(String, Array[Double])] = List()
+   ret = ret :+ (pages(0), Array(1.0 - 0.85, pages.length - 1.0, 0.0))
    
    for (i <- 1 to (pages.length - 1)) {
-      ret(i)(0) = pages(i)
-      ret(i)(1) = Array( 0.85 * 1.0 / (pages.length - 1.0), 0.0, 1.0 )
+      ret = ret :+ (pages(i), Array(0.85 * 1.0 / (pages.length - 1.0), 0.0, 1.0))
    }
    return ret
 }
