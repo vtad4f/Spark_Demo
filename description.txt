@@ -1,0 +1,16 @@
+The regex pattern is generic, so that if the pages are something other than P[0-9]+
+   it will still work.
+   
+In the map phase we find all the pages in the row. We calculate the page rank for the
+   first page. Then we set a value of 1 for inlinks for all proceeding pages. All of which
+   are returned and then interpreted as individual items by calling flatMap.
+   
+In the reduce phase we just add the array elements together. Only the array values are
+   considered (i.e. not the page strings) because we call reduceByKey.
+   
+Then we convert the arrays to strings via the format function. In addition to aligning the
+   values it restricts float values to 2 decimal places. The alignment is important, because
+   it allows us to utilize the bash sort command and not rely on scala.
+   
+I went ahead and also restricted the output to 10 entries for a convenient screenshot.
+

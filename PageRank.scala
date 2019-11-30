@@ -28,10 +28,10 @@ def MyReduce(a : Array[Double], b : Array[Double]) : Array[Double] = {
 
 def ToString(pair : ((String, Array[Double]))) : String = {
 
-   val a = pair._2(0)
-   val b = pair._2(1)
-   val c = pair._2(2)
-   return "%9s %9.2f %9.2f %9.2f".format(pair._1, a, b, c)
+   val pagerank = pair._2(0)
+   val outlinks = pair._2(1)
+   val inlinks  = pair._2(2)
+   return "%9s %9.2f %9.2f %9.2f".format(pair._1, pagerank, outlinks, inlinks)
 }
 
 
