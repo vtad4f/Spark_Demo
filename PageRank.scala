@@ -19,7 +19,7 @@ def MyMap(line : String) : List[(String, Array[Double])] = {
 }
 
 val lines = sc.textFile("InputFolder/PRData.txt")
-val pages = lines.flatMap(MyMap(lines))
+val pages = lines.flatMap(MyMap)
 val ranks = pages.reduceByKey((v1, v2) => v1 + v2)
 
 ranks.saveAsTextFile("OutputFolder")
