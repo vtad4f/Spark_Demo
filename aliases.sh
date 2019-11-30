@@ -18,6 +18,6 @@ function spark
    
    spark-shell -i $REPO_DIR/PageRank.scala
    
-   hadoop fs -cat $OUTPUT_DIR/part-00000 | head -n 10
+   hadoop fs -cat $OUTPUT_DIR/part-00000 | sort -k2 -r | head -n 10
 }
 
