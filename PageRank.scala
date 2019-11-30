@@ -1,17 +1,26 @@
 
 val pattern = "[^\\s\"\\[\\]',]+".r
 
+def MyMap(line : String) : Array[Array[Double]] = {
+   
+   val pages = pattern.findAllIn(line)
+   
+   val ret = Array.ofDim(pages.length(), 2)
+   ret(0)(0) = pages(0)
+   ret(0)(1) = Array( 1.0 - 0.85, pages.length - 1.0, 0.0 )
+   
+   for (i <- 1 to (pages.length - 1)) {
+      ret(i)(0) = pages(i)
+      ret(i)(1) = Array( 0.85 * 1.0 / (pages.length - 1.0), 0.0, 1.0 )
+   }
+   return ret
+}
 
-val loadfile = sc.textFile("InputFolder/PRData.txt")
-val words = loadfile.flatMap(line => pattern.findAllIn(line))
+val lines = sc.textFile("InputFolder/PRData.txt")
+val pages = lines.flatMap(MyMap(line))
+val ranks = pages.reduceByKey((v1, v2) => v1 + v2)
 
-val wordMap = words.map(word => (word,1))
-val wordCount = wordMap.reduceByKey((v1, v2) => v1 + v2)
-
-// val sorted = wordCount.sortBy(-_._2)
-// val filter = sorted.filter(_._2 > 1)
-
-wordCount.saveAsTextFile("OutputFolder")
+ranks.saveAsTextFile("OutputFolder")
 
 System.exit(0)
 
