@@ -3,11 +3,12 @@
 import scala.collection.mutable.ListBuffer
 
 
-val pattern = "[^\\s\"\\[\\]',]+".r
+val PATTERN = "[^\\s\"\\[\\]',]+".r
+
 
 def MyMap(line : String) : List[(String, Array[Double])] = {
    
-   val pages = pattern.findAllIn(line).toArray
+   val pages = PATTERN.findAllIn(line).toArray
    
    val ret = ListBuffer[(String, Array[Double])]()
    ret += ((pages(0), Array(1.0 - 0.85, pages.length - 1.0, 0.0)))
@@ -18,9 +19,20 @@ def MyMap(line : String) : List[(String, Array[Double])] = {
    return ret.toList
 }
 
+
+def MyReduce(a : Array[Double], b : Array[Double]) : Array[Double] = {
+
+   return Array(
+      a(0) + b(0),
+      a(1) + b(1),
+      a(2) + b(2)
+   )
+}
+
+
 val lines = sc.textFile("InputFolder/PRData.txt")
 val pages = lines.flatMap(MyMap)
-val ranks = pages.reduceByKey((v1, v2) => v1 + v2)
+val ranks = pages.reduceByKey(MyReduce)
 
 ranks.saveAsTextFile("OutputFolder")
 
