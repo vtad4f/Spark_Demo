@@ -32,7 +32,7 @@ def MyReduce(a : Array[Double], b : Array[Double]) : Array[Double] = {
 
 def ToString(pair : ((String, Array[Double]))) : String = {
 
-   return pair(0) + " " + pair(1).mkString(" ")
+   return pair._1 + " " + pair._2.mkString(" ")
 }
 
 
