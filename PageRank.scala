@@ -20,21 +20,22 @@ def MyMap(line : String) : List[(String, Array[Double])] = {
 }
 
 
-def MyReduce(a : Array[Double], b : Array[Double]) : String = {
+def MyReduce(a : Array[Double], b : Array[Double]) : Array[Double] = {
 
    return Array(
       a(0) + b(0),
       a(1) + b(1),
       a(2) + b(2)
-   ).mkString(" ")
+   )
 }
 
 
-val lines = sc.textFile("InputFolder/PRData.txt")
-val pages = lines.flatMap(MyMap)
-val ranks = pages.reduceByKey(MyReduce)
+val lines   = sc.textFile("InputFolder/PRData.txt")
+val pages   = lines.flatMap(MyMap)
+val ranks   = pages.reduceByKey(MyReduce)
+val strings = ranks.map((array : Array[Double]) => array.mkString(" "))
 
-ranks.saveAsTextFile("OutputFolder")
+strings.saveAsTextFile("OutputFolder")
 
 System.exit(0)
 
