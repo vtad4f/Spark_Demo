@@ -22,17 +22,16 @@ def MyMap(line : String) : List[(String, Array[Double])] = {
 
 def MyReduce(a : Array[Double], b : Array[Double]) : Array[Double] = {
 
-   return Array(
-      a(0) + b(0),
-      a(1) + b(1),
-      a(2) + b(2)
-   )
+   return Array(a(0) + b(0), a(1) + b(1), a(2) + b(2))
 }
 
 
 def ToString(pair : ((String, Array[Double]))) : String = {
 
-   return pair._1 + " " + pair._2.mkString(" ")
+   val a = pair._2(0)
+   val b = pair._2(1)
+   val c = pair._2(2)
+   return "%s %06.2f %06.2f %06.2f".format(pair._1, a, b, c)
 }
 
 
